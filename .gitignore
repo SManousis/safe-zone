@@ -21,3 +21,5 @@
 
 # Jenkins local deployment state
 .jenkins-state/
+
+pass.md
