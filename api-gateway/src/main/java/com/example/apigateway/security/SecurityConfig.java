@@ -34,6 +34,8 @@ import reactor.core.publisher.Mono;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+    private static final String PRODUCT_BY_ID_PATH = "/products/{id}";
+    private static final String SELLER_ROLE = "SELLER";
 
     @Bean
     SecurityWebFilterChain securityWebFilterChain(
@@ -52,15 +54,15 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
                         .pathMatchers(HttpMethod.GET, "/actuator/health", "/actuator/info").permitAll()
-                        .pathMatchers(HttpMethod.GET, "/products/my").hasRole("SELLER")
-                        .pathMatchers(HttpMethod.GET, "/products", "/products/{id}").permitAll()
-                        .pathMatchers(HttpMethod.POST, "/products").hasRole("SELLER")
-                        .pathMatchers(HttpMethod.PUT, "/products/{id}").hasRole("SELLER")
-                        .pathMatchers(HttpMethod.DELETE, "/products/{id}").hasRole("SELLER")
-                        .pathMatchers(HttpMethod.GET, "/media/images/{id}/metadata").hasRole("SELLER")
+                        .pathMatchers(HttpMethod.GET, "/products/my").hasRole(SELLER_ROLE)
+                        .pathMatchers(HttpMethod.GET, "/products", PRODUCT_BY_ID_PATH).permitAll()
+                        .pathMatchers(HttpMethod.POST, "/products").hasRole(SELLER_ROLE)
+                        .pathMatchers(HttpMethod.PUT, PRODUCT_BY_ID_PATH).hasRole(SELLER_ROLE)
+                        .pathMatchers(HttpMethod.DELETE, PRODUCT_BY_ID_PATH).hasRole(SELLER_ROLE)
+                        .pathMatchers(HttpMethod.GET, "/media/images/{id}/metadata").hasRole(SELLER_ROLE)
                         .pathMatchers(HttpMethod.GET, "/media/images/{id}").permitAll()
-                        .pathMatchers(HttpMethod.POST, "/media/images").hasRole("SELLER")
-                        .pathMatchers(HttpMethod.DELETE, "/media/images/{id}").hasRole("SELLER")
+                        .pathMatchers(HttpMethod.POST, "/media/images").hasRole(SELLER_ROLE)
+                        .pathMatchers(HttpMethod.DELETE, "/media/images/{id}").hasRole(SELLER_ROLE)
                         .anyExchange().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt

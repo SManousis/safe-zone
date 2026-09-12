@@ -332,3 +332,20 @@ To complete the exercise you need all of the following:
 9. Successful workflow run proving the repo is integrated with SonarQube
 
 Once these are in place, the project is considered properly integrated with SonarQube and GitHub for this exercise.
+
+## 14. Audit note: SonarQube issue resolved
+
+To demonstrate a code-quality improvement required by the audit, a SonarQube issue was resolved in:
+
+```text
+api-gateway/src/main/java/com/example/apigateway/security/SecurityConfig.java
+```
+
+SonarQube reported duplicated string literals for the `SELLER` role and the `/products/{id}` path. These literals were replaced with the following class constants:
+
+```java
+private static final String PRODUCT_BY_ID_PATH = "/products/{id}";
+private static final String SELLER_ROLE = "SELLER";
+```
+
+This change removes the duplication, improves maintainability, and provides evidence that an issue identified by SonarQube was reviewed and fixed. After pushing the change, run the GitHub Actions workflow again and confirm in SonarQube that the issues are marked as resolved.
